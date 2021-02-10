@@ -33,7 +33,7 @@ dataset = dataset.select(lambda item: len(item.annotations) != 0)
 
 ## Filter annotations
 
-- `filter_annotations` to filter annotations instead of dataset
+- `filter_annotations` to filter annotations instead of dataset items (images)
 - `remove_empty` to remove images without annotations
 - [XPath](https://devhints.io/xpath) is used as a query format
 
