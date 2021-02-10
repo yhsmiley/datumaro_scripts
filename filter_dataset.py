@@ -30,6 +30,7 @@ dataset1 = dataset.filter('/item/annotation[w>5]', filter_annotations=True)
 
 # print filtered stats
 print('filtered stats')
+print(f'num images: {num_img(dataset1)}')
 print(f'num images with annotations: {num_img_with_annots(dataset1)}')
 print(f'num annotations: {num_annots(dataset1)}')
 
