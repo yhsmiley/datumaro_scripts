@@ -27,18 +27,18 @@ test_ratio = split_ratio[2] / sum(split_ratio)
 print(f'train/val/test ratio: {train_ratio} {val_ratio} {test_ratio}')
 
 dataset = dataset.transform('random_split',
-			[('train', train_ratio),
-			('val', val_ratio),
-			('test', test_ratio)])
+            [('train', train_ratio),
+            ('val', val_ratio),
+            ('test', test_ratio)])
 
 for subset_name, subset in dataset.subsets().items():
-	# print some stats
-	print(f'subset: {subset_name}')
-	print(f'num images: {num_img(subset)}')
-	print(f'num images with annotations: {num_img_with_annots(subset)}')
-	print(f'num annotations: {num_annots(subset)}')
+    # print some stats
+    print(f'subset: {subset_name}')
+    print(f'num images: {num_img(subset)}')
+    print(f'num images with annotations: {num_img_with_annots(subset)}')
+    print(f'num annotations: {num_annots(subset)}')
 
-	# export the resulting dataset in COCO format
-	subset_to_export = dataset.select(lambda item: item.subset==subset_name)
-	output_json_path = str(Path(args.json_path).parent/Path(subset_name+'.json'))
-	export_json(subset_to_export, output_json_path)
+    # export the resulting dataset in COCO format
+    subset_to_export = dataset.select(lambda item: item.subset==subset_name)
+    output_json_path = Path(args.json_path).parent/Path(subset_name+'.json')
+    export_json(subset_to_export, str(output_json_path))

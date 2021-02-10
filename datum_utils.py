@@ -26,6 +26,10 @@ def export_json(dataset, output_path, input_path=""):
         instances_json_path = json_glob[0]
 
         if len(output_path):
+            output_pathlib = Path(output_path)
+            if output_pathlib.is_file():
+                if input(f'Overwrite {output_pathlib.name}? y/n: ') == 'n':
+                    output_path = str(output_pathlib.parent/'datum_split'/output_pathlib.name)
             Path(output_path).parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(instances_json_path, output_path)
         else:
