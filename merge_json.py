@@ -3,7 +3,7 @@ from pathlib import Path
 from pprint import pprint
 
 from datumaro.components.project import Project
-from datum_utils import num_img, num_img_with_annots, num_annots, export_json
+from datum_utils import num_img, num_img_with_annots, num_annots, export_json, check_json_path
 
 
 ### WARNING: IMAGE FILE_NAME MUST BE UNIQUE!!! ###
@@ -21,12 +21,14 @@ project = Project()
 # add sources
 if args.json_paths:
 	for i, json_path in enumerate(args.json_paths):
-		project.add_source(f'src{i}', {'url': json_path, 'format': 'coco_instances'})
+		new_json_path = check_json_path(json_path)
+		project.add_source(f'src{i}', {'url': str(new_json_path), 'format': 'coco_instances'})
 elif args.annots_folder:
 	# doesnt recursively search in subfolders
 	for i, json_path in enumerate(Path(args.annots_folder).iterdir()):
 		if json_path.suffix == '.json':
-			project.add_source(f'src{i}', {'url': str(json_path), 'format': 'coco_instances'})
+			new_json_path = check_json_path(json_path)
+			project.add_source(f'src{i}', {'url': str(new_json_path), 'format': 'coco_instances'})
 
 # create a dataset
 dataset = project.make_dataset()

@@ -17,18 +17,37 @@ def num_annots(dataset):
     return sum([len(item.annotations) for item in dataset])
 
 def export_json(dataset, output_path, input_path=""):
-    temp_dir = 'datum_temp'
-    dataset.export(temp_dir, 'coco_instances', reindex=True)
+    try:
+        temp_dir = 'datum_temp'
+        dataset.export(temp_dir, 'coco_instances', reindex=True)
 
-    instances_json_path = next(Path(f'{temp_dir}/annotations').glob('*.json'))
+        json_glob = list(Path(f'{temp_dir}/annotations').glob('*.json'))
+        assert len(json_glob) == 1, "Multiple output json files created! Something is wrong... Rename the input jsons with 'datum_utils.check_json_path'."
+        instances_json_path = json_glob[0]
 
-    if len(output_path):
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(instances_json_path, output_path)
+        if len(output_path):
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(instances_json_path, output_path)
+        else:
+            shutil.copyfile(instances_json_path, input_path)
+    finally:
+        _clear_datum_temps()
+
+def check_json_path(json_path):
+    # having multiple jsons with '_' in filename will cause errors
+    if '_' in Path(json_path).stem:
+        temp_dir = Path('datum_temp_rename')
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        new_json_path = temp_dir/f"json{len(list(temp_dir.glob('*')))}.json"
+        shutil.copyfile(json_path, new_json_path)
+        return new_json_path
     else:
-        shutil.copyfile(instances_json_path, input_path)
+        return json_path
 
-    shutil.rmtree(temp_dir)
+def _clear_datum_temps():
+    for temp_dir in Path.cwd().glob('datum_temp*'):
+        if temp_dir.is_dir():
+            shutil.rmtree(temp_dir)
 
 def print_extractor_info(extractor, indent=''):
     print("%slength:" % indent, len(extractor))
