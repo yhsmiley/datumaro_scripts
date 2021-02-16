@@ -142,15 +142,16 @@ def compute_ann_statistics(dataset):
 
     unique_images = _find_unique_images(dataset)
     repeated_images = [sorted(g) for g in unique_images.values() if 1 < len(g)]
+    unannotated_images = []
 
     stats = {
         'images count': len(dataset),
         'unique images count': len(unique_images),
         'repeated images count': len(repeated_images),
-        'repeated images': repeated_images, # [[id1, id2], [id3, id4, id5], ...]
+        # 'repeated images': repeated_images, # [[id1, id2], [id3, id4, id5], ...]
         'annotations count': 0,
         'unannotated images count': 0,
-        'unannotated images': [],
+        # 'unannotated images': [],
         'annotations by type': { t.name: {
             'count': 0,
         } for t in AnnotationType },
@@ -187,7 +188,7 @@ def compute_ann_statistics(dataset):
 
     for item in dataset:
         if len(item.annotations) == 0:
-            stats['unannotated images'].append(item.id)
+            unannotated_images.append(item.id)
             continue
 
         for ann in item.annotations:
@@ -218,7 +219,7 @@ def compute_ann_statistics(dataset):
 
     stats['annotations count'] = sum(t['count'] for t in
         stats['annotations by type'].values())
-    stats['unannotated images count'] = len(stats['unannotated images'])
+    stats['unannotated images count'] = len(unannotated_images)
 
     for label_info in label_stat['distribution'].values():
         label_info[1] = label_info[0] / (label_stat['count'] or 1)
