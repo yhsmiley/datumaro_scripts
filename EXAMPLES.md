@@ -8,12 +8,13 @@ dataset = Dataset.from_extractors(dataset1, dataset2)
 
 - `default='keep'` to keep all other categories
 - `default='delete'` to remove all other categories
+- NOTE: If you want to remove a category, have to specify all other categories and `default='delete'`. Doesnt work if `default='keep'`.
 
 ```python
 dataset = dataset.transform('remap_labels',
     {'pedestrian': 'person', # rename pedestrian to person
     'dog': '' # remove this label
-    }, default='keep')
+    }, default='delete')
 ```
 
 ## Iterate over dataset elements
@@ -29,6 +30,12 @@ for item in dataset:
 
 ```python
 dataset = dataset.select(lambda item: len(item.annotations) != 0)
+```
+
+### Keep images with names that start with 'test_string'
+
+```python
+dataset = dataset.select(lambda item: item.id.startswith('test_string'))
 ```
 
 ## Filter annotations
