@@ -62,6 +62,16 @@ dataset1 = dataset.filter('/item/annotation[label="person"]', filter_annotations
 dataset1 = dataset.filter('/item/annotation[w>5]', filter_annotations=True)
 ```
 
+### Filter with custom conditions
+```python
+for item in dataset:
+    for annot in item.annotations:
+        if condition:
+            annot.attributes["to_remove"] = True
+
+dataset1 = dataset.filter(f"/item/annotation[not(to_remove='True')]", filter_annotations=True)
+```
+
 ## Get dataset statistics
 
 ```python
