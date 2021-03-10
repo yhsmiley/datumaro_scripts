@@ -29,6 +29,7 @@ if __name__ == '__main__':
 	import argparse
 	from pathlib import Path
 
+
 	ap = argparse.ArgumentParser()
 	group = ap.add_mutually_exclusive_group(required=True)
 	group.add_argument('--json_path', help='annotations json path')
