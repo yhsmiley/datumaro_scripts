@@ -6,6 +6,11 @@ Refer to `EXAMPLES.md` for example usage.
 
 Currently, scripts are used to preprocess COCO jsons.
 
+## TODO
+
+- [ ] upgrade code to support datumaro upgrade from 0.1.5.1 to 0.1.6.1
+- [ ] fix "iscrowd" bug (might be fixed with datumaro upgrade)
+
 ## Installation
 
 - First, install pycocotools
